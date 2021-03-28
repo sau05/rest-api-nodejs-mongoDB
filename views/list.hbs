@@ -1,0 +1,18 @@
+<h1>
+    Company
+</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Name</th>
+    </tr>
+    {{#each data}}
+    <tr>
+        <td>{{this._id}}</td>
+        <td>{{this.status}}</td>
+        <td>{{this.name}}</td>
+    </tr>
+    {{/each}}
+</table>
