@@ -1,103 +1,97 @@
-const express = require('express')
 const mongoose = require('mongoose');
 const customerModel = require('../models/customer.model');
 const productModel = require('../models/product.model');
-
-const router = express.Router();
+const { constants } = require('../helper/constants')
 const CompanyModel = mongoose.model('Company');
 
-router.get('/add', (req, res) => {
-    res.render('add-company')
-})
-
-router.post('/add', (req, res) => {
+exports.add = ((req, res) => {
     var company = new CompanyModel();
     company.name = req.body.name;
     company.status = req.body.status;
-    company.save((err, docs) => {
-        if (err) {
-            res.send('Error Occured')
-        } else {
-            res.redirect('/company/list')
-        }
+    company.save().then((docs) => {
+        res.send({ status: constants.STATUS_SUCCESS, message: 'Record successfully added' })
+    }).catch((e) => {
+        res.send({ status: constants.STATUS_ERROR, message: 'Error while saving company.' })
     })
-    // res.render('add-company')
-})
-router.get('/list', (req, res) => {
-    CompanyModel.find((err, docs) => {
-        if (err) {
-            res.send({ status: 400, message: 'Error while fetching company list' })
-        } else {
-            res.send({ status: 200, Company: docs })
-        }
-    }).lean()
 })
 
-router.put('/update', (req, res) => {
-    CompanyModel.findOne({ _id: req.body.id }, (err, company) => {
-        if (err) {
-            res.send({ status: 400, message: 'Error while getting company' })
-        } else if (company == null) {
-            res.send({ status: 404, message: 'No such company found' })
+exports.list = ((req, res) => {
+    CompanyModel.find().lean().then((docs) => {
+        res.send({ status: constants.STATUS_SUCCESS, Company: docs })
+    }).catch((e) => {
+        res.send({ status: constants.STATUS_ERROR, message: 'Error while fetching company list' })
+    })
+})
+
+exports.update = ((req, res) => {
+    CompanyModel.findOne({ _id: req.body.id }).lean().then((company) => {
+        if (company == null) {
+            res.send({ status: constants.STATUS_NOTFOUND, message: 'No such company found' })
         } else {
-            CompanyModel.findByIdAndUpdate({ _id: req.body.id }, req.body, (err, docs) => {
-                if (err) {
-                    res.send({ status: 400, message: 'Failed to update company.' })
-                } else {
-                    res.send({ status: 200, message: 'Company updated successfully.' })
-                }
+            CompanyModel.findByIdAndUpdate({ _id: req.body.id }, req.body).lean().then((docs) => {
+                res.send({ status: constants.STATUS_SUCCESS, message: 'Company updated successfully.' })
+            }).catch((e) => {
+                res.send({ status: constants.STATUS_ERROR, message: 'Failed to update company.' })
             })
         }
+    }).catch((e) => {
+        res.send({ status: constants.STATUS_ERROR, message: 'Error while getting company' })
     })
 })
 
-router.delete('/delete/:id', (req, res) => {
-    CompanyModel.findOne({ _id: req.params.id }, (err, company) => {
-        if (err) {
-            res.send({ status: 400, message: 'Error while getting company' })
-        } else if (company == null) {
-            res.send({ status: 404, message: 'No such company found' })
+exports.delete = ((req, res) => {
+    CompanyModel.findOne({ _id: req.params.id }).lean().then((company) => {
+        if (company == null) {
+            res.send({ status: constants.STATUS_NOTFOUND, message: 'No such company found' })
         } else {
-            CompanyModel.findOne({ _id: req.params.id }, (err, docs) => {
-                if (err) {
-                    res.send({ status: 400, message: 'Failed to delete company.' })
-                } else if (docs == null) {
-                    res.send({ status: 404, message: `This company doesn't exist` })
+            CompanyModel.findOne({ _id: req.params.id }).then((docs) => {
+                console.log(docs)
+                if (docs == null) {
+                    res.send({ status: constants.STATUS_NOTFOUND, message: `This company doesn't exist` })
                 } else {
                     docs.remove().then((result) => {
-                        res.send({ status: 200, message: 'Company deleted successfully.' })
+                        res.send({ status: constants.STATUS_SUCCESS, message: 'Company deleted successfully.' })
                     }).catch((e) => {
-                        res.send({ status: 500, message: e })
+                        res.send({ status: constants.STATUS_ERROR, message: e })
                     })
                 }
+            }).catch((e) => {
+                console.log(e)
+                res.send({ status: constants.STATUS_ERROR, message: 'Failed to delete company.' })
             })
         }
+    }).catch((e) => {
+        res.send({ status: constants.STATUS_ERROR, message: 'Error while getting company' })
     })
 })
 
-router.post('/filtercompany', async (req, res) => {
-    const companyName = req.body.companyName;
-    await CompanyModel.findOne({ name: companyName }).lean().then(async (company) => {
-        if (company === null) {
-            res.send({ status: 404, message: 'No such company found.' })
+exports.filtercompany = (async (req, res) => {
+    const companyNames = req.body.companyName;
+    await CompanyModel.find({ name: { $in: companyNames } }).lean().then(async (companies) => {
+        if (companies.length == 0) {
+            res.send({ status: constants.STATUS_NOTFOUND, message: 'No such company found.' })
         } else {
-            let customers = []
-            await productModel.find({ company: company._id }).lean().then(async (products) => {
-                for (const product of products) {
-                    await customerModel.find({ product: product._id }).populate({ path: 'product' }).lean().then(async (customer) => {
-                        customers.push(customer)
-                    })
-                }
-                await res.send({ status: 200, customer: customers })
+            let companyIds = companies.map(company => company._id)
+            await productModel.find({ company: { $in: companyIds } }).lean().then(async (products) => {
+                let productIds = products.map(product => product._id)
+                await customerModel.find({ product: { $in: productIds } }).populate({ path: 'product' }).lean().then(async (customers) => {
+                    res.send({ status: constants.STATUS_SUCCESS, customer: customers })
+                }).catch((e) => {
+                    res.send({ status: constants.STATUS_ERROR, message: 'Error while getting customer.' })
+                })
+            }).catch((e) => {
+                res.send({ status: constants.STATUS_ERROR, message: 'Error while getting product.' })
             })
         }
+    }).catch((e) => {
+        res.send({ status: constants.STATUS_ERROR, message: 'Error while getting company.' })
     })
 })
 
-router.post('/getCityWithMostSales', (req, res) => {
+exports.getCityWithMostSales = ((req, res) => {
     CompanyModel.findOne({ name: req.body.companyName }, { _id: true }).lean().then((company) => {
         if (company == null) {
-            res.send({ status: 404, message: 'No such company found.' })
+            res.send({ status: constants.STATUS_NOTFOUND, message: 'No such company found.' })
         } else {
             productModel.find({ company: company._id }, { _id: true }).lean().then((products) => {
                 let productIds = products.map(product => product._id)
@@ -111,17 +105,15 @@ router.post('/getCityWithMostSales', (req, res) => {
                     }, {});
                     let maxValue = Math.max(...Object.values(result))
                     let finalRes = Object.keys(result).filter(x => result[x] == maxValue)
-                    res.send({ status: 200, 'popular city': finalRes })
+                    res.send({ status: constants.STATUS_SUCCESS, 'popular city': finalRes })
                 }).catch((e) => {
-                    res.send({ status: 400, message: 'Error while getting customer.' })
+                    res.send({ status: constants.STATUS_ERROR, message: 'Error while getting customer.' })
                 })
             }).catch((e) => {
-                res.send({ status: 400, message: 'Error while getting product.' })
+                res.send({ status: constants.STATUS_ERROR, message: 'Error while getting product.' })
             })
         }
     }).catch((e) => {
-        res.send({ status: 400, message: 'Error while getting company.' })
+        res.send({ status: constants.STATUS_ERROR, message: 'Error while getting company.' })
     })
 })
-
-module.exports = router;

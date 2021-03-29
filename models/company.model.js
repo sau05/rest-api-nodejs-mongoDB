@@ -20,7 +20,7 @@ CompanySchema.post('remove', (doc, next) => {
     productModel.find({ company: doc._id }, (err, products) => {
         if (err) {
             next(new Error('error'))
-        } else if (products == null) {
+        } else if (products.length == 0) {
             next(new Error('no such product'))
         } else {
             products.forEach((product) => {
