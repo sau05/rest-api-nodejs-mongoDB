@@ -1,0 +1,331 @@
+{
+	"variables": [],
+	"info": {
+		"name": "LMS_test",
+		"_postman_id": "2bd070de-8a11-a814-9c4e-9deb34a110c0",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add product",
+			"request": {
+				"url": "http://localhost:3000/product/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Aspire\", \"company\":\"5\", \"price\":\"800000\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "edit product",
+			"request": {
+				"url": "http://localhost:3000/product/update",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"4\",\"name\":\"Aspire trend\", \"company\":\"5\", \"price\":\"800000\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete product",
+			"request": {
+				"url": "http://localhost:3000/product/delete/18",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "add company",
+			"request": {
+				"url": "http://localhost:3000/company/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Ford\", \"status\":\"active\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "edit company",
+			"request": {
+				"url": "http://localhost:3000/company/update",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"18\",\"name\":\"Mahindra\", \"status\":\"inactive\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete company",
+			"request": {
+				"url": "http://localhost:3000/company/delete/",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "add customer",
+			"request": {
+				"url": "http://localhost:3000/customer/add",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Vivek\", \"product\":\"32\", \"city\":\"Ahmedabad\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "edit customer",
+			"request": {
+				"url": "http://localhost:3000/customer/update",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"10\",\"name\":\"Ronak\", \"product\":\"28\", \"city\":\"Mehsana\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete customer",
+			"request": {
+				"url": "http://localhost:3000/customer/delete/6",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "product list",
+			"request": {
+				"url": "http://localhost:3000/product/list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Ford\", \"status\":\"active\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "company list",
+			"request": {
+				"url": "http://localhost:3000/company/list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Ford\", \"status\":\"active\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "customer list",
+			"request": {
+				"url": "http://localhost:3000/company/list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Ford\", \"status\":\"active\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "popular product",
+			"request": {
+				"url": "http://localhost:3000/company/list",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"Ford\", \"status\":\"active\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "filter company name",
+			"request": {
+				"url": "http://localhost:3000/company/filtercompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"companyName\":[\"Ford\"]}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "city with most sales",
+			"request": {
+				"url": "http://localhost:3000/company/getCityWithMostSales",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"companyName\":\"Ford\"}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "filter customer name",
+			"request": {
+				"url": "http://localhost:3000/customer/filtercustomer",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"customerName\":[\"Saurabh\"]}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

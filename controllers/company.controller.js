@@ -45,7 +45,6 @@ exports.delete = ((req, res) => {
             res.send({ status: constants.STATUS_NOTFOUND, message: 'No such company found' })
         } else {
             CompanyModel.findOne({ _id: req.params.id }).then((docs) => {
-                console.log(docs)
                 if (docs == null) {
                     res.send({ status: constants.STATUS_NOTFOUND, message: `This company doesn't exist` })
                 } else {
@@ -56,7 +55,6 @@ exports.delete = ((req, res) => {
                     })
                 }
             }).catch((e) => {
-                console.log(e)
                 res.send({ status: constants.STATUS_ERROR, message: 'Failed to delete company.' })
             })
         }

@@ -7,9 +7,7 @@ const ProductController = require('./controllers/product.controller')
 exports.configure = ((app, route)=>{
 
     app.use('/', route)
-    // console.log(app)
-    // console.log(CompanyController.add)
-
+    
     app.post('/company/add', CompanyController.add)
     app.get('/company/list', CompanyController.list)
     app.put('/company/update', CompanyController.update)
